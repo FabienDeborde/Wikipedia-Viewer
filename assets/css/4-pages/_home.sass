@@ -1,8 +1,117 @@
 .container
-  width: 900px
+  max-width: 900px
   margin: auto
+  color: #8e44ad
 
   h1
     text-align: center
-    color: #2c3e50
     margin-bottom: 50px
+
+  form#searchForm
+    text-align: center
+    position: relative
+    display: flex
+    justify-content: center
+    input#searchInput
+      width: 450px
+      padding: 15px 20px
+      font-size: 1.5em
+      border: 1px solid #9b59b6
+      @include placeholder
+        opacity: 1
+        color: rgba(155, 89, 182,0.6)
+      &:focus
+        border: 1px solid #9b59b6
+        outline: none
+
+    input#submitForm
+      display: block
+      width: 100px
+      border: 1px solid #9b59b6
+      border-left: none
+      background-color: #9b59b6
+      color: $white
+      font-size: 1.2em
+      letter-spacing: 0.9px
+      &:hover
+        background-color: $white
+        color: #9b59b6
+      &:focus, &:active
+        outline: none
+
+  #formResult
+    text-align: center
+    margin: 50px auto
+    font-style: italic
+    .error
+      color: rgba(231, 76, 60,1.0)
+  .resultContainer
+    min-width: 600px
+    width: 80%
+    margin: auto
+    border: 1px solid #9b59b6
+    padding: 20px 30px
+    border-radius: 2px
+    .result
+      margin: 20px 0
+    &:hover
+      color: white
+      background-color: #9b59b6
+      cursor: pointer
+    hr
+      border: 1px solid rgba(155, 89, 182,0.4)
+    h1
+      text-align: left
+      width: 90%
+      display: inline-block
+      margin: 0 auto 10px
+    .description, p
+      margin: auto
+      width: 90%
+      text-align: left
+      line-height: 1.7em
+      font-style: normal
+      font-size: 1.1em
+
+
+
+  .or
+    margin: 50px auto
+    text-align: center
+    text-transform: uppercase
+    font-size: 1.2em
+    color: #8e44ad
+
+  a#randomSearch
+    display: block
+    margin: 50px auto
+    text-align: center
+    padding: 10px 20px
+    background-color: #9b59b6
+    width: 250px
+    color: $white
+    text-decoration: none
+    font-size: 1.2em
+    border-radius: 4px
+    &:hover
+      background-color: $white
+      color: #9b59b6
+      border: 1px solid #9b59b6
+      svg
+        .st0
+          stroke: #9b59b6
+        .st1
+          fill: #9b59b6
+    svg
+      display: inline-block
+      height: 43px
+      width: auto
+      margin-right: 15px
+      margin-bottom: 7px
+      vertical-align: middle
+      .st0
+        fill: none
+        stroke: #fff
+        stroke-width: 1.4173
+      .st1
+        fill: $white

@@ -5,3 +5,18 @@ $blue: #3498db
 $purple: #7581e7
 $black: #040404
 $white: white
+
+
+@mixin placeholder
+  &::placeholder
+    @content
+  &::-moz-placeholder
+    @content
+  &:-moz-placeholder
+    @content
+  &::-webkit-input-placeholder
+    @content
+  &:-ms-input-placeholder
+    @content
+  &::-ms-input-placeholder
+    @content
