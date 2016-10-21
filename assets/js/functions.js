@@ -11,7 +11,7 @@ $(document).ready(function() {
 
   // Prepare the AJAX query
 
-  function wikiQuery(random, url){
+  function wikiQuery(url){
     $.ajax({
       method: "GET",
       url: url,
@@ -23,47 +23,60 @@ $(document).ready(function() {
         result.text('Searching...');
       },
       success: function(data){
-        console.log(data);
+
+        var pageID = Object.keys(data.query.pages); // Array storing the ids of all articles returned by the query
+        var queryData = ''; // Store the path to each article data
+        var articleID = ''; // Store each article ID
+        var cleanText = ''; // Store the article extracted and cleaned text
+        var title = ''; // Store the page title
+        var articleLink = []; // Store the url to the article
+
+        msg = '<div class="resultContainer">';
+
+        for (var i = 0; i < pageID.length; i+= 1) {
+          articleID = pageID[i];
+          queryData = data.query.pages[articleID];
+          title = queryData.title;
+          articleLink.push(queryData.fullurl);
+          cleanText = queryData.extract.slice(0,-3);
+          msg += '<div class="singleResult" id="' + i + '"><h1>' + title + '</h1><div class="textContent">' + cleanText + '</div></div>';
+          msg += '<hr/>';
+        }
+        msg += '</div>';
+        result.html(msg);
+        $('.textContent p:last-child').append('<span>...<span>');
+
+
+
+        $('.singleResult').on('click', function(e){
+          var id = $(this).attr("id");
+          window.open(articleLink[id], '_blank');
+        })
+
+        /*
         if (random === false) {
-          var pageID = Object.keys(data.query.pages);
-          var queryData = data.query.pages[pageID];
-          var cleanText = queryData.extract.slice(0,-4);
 
-
-          msg = '<div class="resultContainer">';
-          msg += '<h1>' + queryData.displaytitle + '</h1>';
-          msg += cleanText + '</div>';
-
-          result.html(msg);
-          $('.resultContainer p').append('<span>...<span>');
-
-          $('.resultContainer').on('click', function(){
-            window.open(queryData.fullurl, '_blank');
-          })
-        } else {  // Random Data
+        } else {  // Get Random Data (randomButton clicked)
 
           var randomID = data.query.random[0].id;
-          console.log(randomID);
-
           $.ajax({
             method: "GET",
-            url: '//en.wikipedia.org/w/api.php?action=query&format=json&prop=info%7Cextracts&list=&continue=&pageids=' + randomID + '&inprop=url%7Cdisplaytitle&exchars=475',
+            url: '//en.wikipedia.org/w/api.php?action=query&format=json&prop=info|extracts&list=&continue=&pageids=' + randomID + '&inprop=url|displaytitle&exchars=400',
             dataType: "jsonp",
             crossDomain: true,
             headers: { 'Api-User-Agent': 'Example/1.0' },
             timeout: 2000,
             success: function(data){
-              console.log(data);
               var pageID = Object.keys(data.query.pages);
               var queryData = data.query.pages[pageID];
               var cleanText = queryData.extract.slice(0,-4);
 
-              msg = '<div class="resultContainer">';
+              msg = '<div class="resultContainer"><div class="singleResult">';
               msg += '<h1>' + queryData.displaytitle + '</h1>';
-              msg += cleanText + '</div>';
+              msg += cleanText + '</div></div>';
 
               result.html(msg);
-              $('.resultContainer p:first').append('<span>...<span>').nextAll().remove();
+              $('.singleResult p:last-child').append('<span>...<span>');
 
               $('.resultContainer').on('click', function(){
                 window.open(queryData.fullurl, '_blank');
@@ -71,7 +84,7 @@ $(document).ready(function() {
             } // end of success function
           }) // end of ajax function
 
-        } // end of else
+        } // end of else*/
 
       },
       error: function(jqXHR){
@@ -86,34 +99,70 @@ $(document).ready(function() {
     // Get the keyword value when the form is submitted
     keyword = $('#searchInput').val();
     // Make the query url
-    urlQuery = '//en.wikipedia.org/w/api.php?action=query&format=json&prop=extracts%7Cinfo&list=&titles=' + keyword + '&exchars=475&inprop=url%7Cdisplaytitle';
+    urlQuery = '//en.wikipedia.org/w/api.php?action=query&format=json&prop=info|extracts&generator=search&inprop=url|displaytitle&exchars=400&exlimit=5&exintro=1&gsrsearch=' + keyword + '&gsrnamespace=0&gsrlimit=5&gsrqiprofile=classic';
     // Call the query function
-    wikiQuery(false, urlQuery);
+    wikiQuery(urlQuery);
   }); // end of function searchForm.on submit
 
   // Random Button
 
   randomButton.on('click', function(e){
     e.preventDefault();
-    urlQuery = '//en.wikipedia.org/w/api.php?action=query&format=json&list=random&continue=-%7C%7Cinfo&rnnamespace=0%7C4&rnlimit=1'; // random page access
-    wikiQuery(true, urlQuery);
+    urlQuery = '//en.wikipedia.org/w/api.php?format=json&action=query&prop=info|extracts&generator=random&inprop=url|displaytitle&exchars=400&exlimit=10&exintro=1&grnnamespace=0'; // random page access
+    wikiQuery(urlQuery);
   })
 
 });
+
+/*
 /*https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles=Stack%20Overflow
 
-/w/api.php?action=query&format=json&prop=extracts%7Cinfo&list=&titles=paris&exchars=475&inprop=url%7Cdisplaytitle
+/w/api.php?action=query&format=json&prop=extracts|info&list=&titles=paris&exchars=475&inprop=url|displaytitle
 
-//en.wikipedia.org/w/api.php?action=query&format=json&prop=extracts%7Cinfo&list=search&meta=&continue=-%7C%7Cextracts%7Cinfo&titles=&exchars=475&inprop=url%7Cdisplaytitle&srsearch=paris&srnamespace=0%7C4&srlimit=10
+//en.wikipedia.org/w/api.php?action=query&format=json&prop=extracts|info&list=search&meta=&continue=-||extracts|info&titles=&exchars=475&inprop=url|displaytitle&srsearch=paris&srnamespace=0|4&srlimit=10
+
+https://en.wikipedia.org
+/w/api.php?format=jsonfm&
+action=query&
+prop=info|extracts&
+generator=random&
+inprop=url|displaytitle&
+exchars=400&
+exlimit=10&
+exintro=1&
+grnnamespace=0
 
 
-        /*
-        var reqData = data.query.search;
-        msg = '<div class="resultContainer">';
-        for (var i = 0; i < reqData.length; i += 1) {
-          msg += '<div class="result">';
-          msg += '<h1>' + reqData[i].title + '</h1>';
-          msg += '<div class="description">' + reqData[i].snippet + '</div></div> <hr>';
-        }
-        msg += '</div>';
-        result.html(msg);*/
+
+
+// /w/api.php?format=json&
+action=query&
+generator=search&
+gsrnamespace=0&
+gsrsearch=test&
+gsrlimit=10&
+prop=pageimages|extracts&
+pilimit=max&
+exintro&
+explaintext&
+exsentences=1&
+exlimit=max
+
+// /w/api.php?format=json&
+action=query&
+generator=search&
+gsrnamespace=0&
+gsrsearch=paris&
+gsrlimit=10&
+gsrqiprofile=classic&
+prop=info|extracts&
+inprop=url|displaytitle&
+exintro&
+explaintext&
+exsentences=1&
+exlimit=max
+// /w/api.php?format=json&action=query&generator=search&gsrnamespace=0&gsrsearch=paris&gsrqiprofile=classic&gsrlimit=10&prop=info|extracts&inprop=url|displaytitle&exchars=400
+
+// /w/api.php?format=json&action=query&prop=info|extracts&generator=search&inprop=url|displaytitle&exchars=400&exlimit=10&exintro=1&gsrsearch=paris&gsrnamespace=0&gsrlimit=5&gsrqiprofile=classic
+//
+*/

@@ -348,15 +348,15 @@ body {
   width: 80%;
   margin: auto;
   border: 1px solid #9b59b6;
-  padding: 20px 30px;
   border-radius: 2px;
 }
 
-.container .resultContainer .result {
-  margin: 20px 0;
+.container .resultContainer .singleResult {
+  margin: auto;
+  padding: 20px 20px;
 }
 
-.container .resultContainer:hover {
+.container .resultContainer .singleResult:hover {
   color: white;
   background-color: #9b59b6;
   cursor: pointer;
@@ -364,6 +364,11 @@ body {
 
 .container .resultContainer hr {
   border: 1px solid rgba(155, 89, 182, 0.4);
+  width: 60%;
+}
+
+.container .resultContainer hr:last-child {
+  display: none;
 }
 
 .container .resultContainer h1 {
