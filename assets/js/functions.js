@@ -16,8 +16,6 @@ $(document).ready(function() {
       method: "GET",
       url: url,
       dataType: "jsonp",
-      crossDomain: true,
-      headers: { 'Api-User-Agent': 'Example/1.0' },
       timeout: 2000,
       beforeSend: function(){
         result.text('Searching...');
@@ -46,46 +44,11 @@ $(document).ready(function() {
         result.html(msg);
         $('.textContent p:last-child').append('<span>...<span>');
 
-
-
+        //Make the article clickable
         $('.singleResult').on('click', function(e){
           var id = $(this).attr("id");
           window.open(articleLink[id], '_blank');
         })
-
-        /*
-        if (random === false) {
-
-        } else {  // Get Random Data (randomButton clicked)
-
-          var randomID = data.query.random[0].id;
-          $.ajax({
-            method: "GET",
-            url: '//en.wikipedia.org/w/api.php?action=query&format=json&prop=info|extracts&list=&continue=&pageids=' + randomID + '&inprop=url|displaytitle&exchars=400',
-            dataType: "jsonp",
-            crossDomain: true,
-            headers: { 'Api-User-Agent': 'Example/1.0' },
-            timeout: 2000,
-            success: function(data){
-              var pageID = Object.keys(data.query.pages);
-              var queryData = data.query.pages[pageID];
-              var cleanText = queryData.extract.slice(0,-4);
-
-              msg = '<div class="resultContainer"><div class="singleResult">';
-              msg += '<h1>' + queryData.displaytitle + '</h1>';
-              msg += cleanText + '</div></div>';
-
-              result.html(msg);
-              $('.singleResult p:last-child').append('<span>...<span>');
-
-              $('.resultContainer').on('click', function(){
-                window.open(queryData.fullurl, '_blank');
-              }) // end of on click function
-            } // end of success function
-          }) // end of ajax function
-
-        } // end of else*/
-
       },
       error: function(jqXHR){
         result.html('<span class="error">An error occured. Please try again later.</span>');
@@ -105,7 +68,6 @@ $(document).ready(function() {
   }); // end of function searchForm.on submit
 
   // Random Button
-
   randomButton.on('click', function(e){
     e.preventDefault();
     urlQuery = '//en.wikipedia.org/w/api.php?format=json&action=query&prop=info|extracts&generator=random&inprop=url|displaytitle&exchars=400&exlimit=10&exintro=1&grnnamespace=0'; // random page access
@@ -113,56 +75,3 @@ $(document).ready(function() {
   })
 
 });
-
-/*
-/*https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles=Stack%20Overflow
-
-/w/api.php?action=query&format=json&prop=extracts|info&list=&titles=paris&exchars=475&inprop=url|displaytitle
-
-//en.wikipedia.org/w/api.php?action=query&format=json&prop=extracts|info&list=search&meta=&continue=-||extracts|info&titles=&exchars=475&inprop=url|displaytitle&srsearch=paris&srnamespace=0|4&srlimit=10
-
-https://en.wikipedia.org
-/w/api.php?format=jsonfm&
-action=query&
-prop=info|extracts&
-generator=random&
-inprop=url|displaytitle&
-exchars=400&
-exlimit=10&
-exintro=1&
-grnnamespace=0
-
-
-
-
-// /w/api.php?format=json&
-action=query&
-generator=search&
-gsrnamespace=0&
-gsrsearch=test&
-gsrlimit=10&
-prop=pageimages|extracts&
-pilimit=max&
-exintro&
-explaintext&
-exsentences=1&
-exlimit=max
-
-// /w/api.php?format=json&
-action=query&
-generator=search&
-gsrnamespace=0&
-gsrsearch=paris&
-gsrlimit=10&
-gsrqiprofile=classic&
-prop=info|extracts&
-inprop=url|displaytitle&
-exintro&
-explaintext&
-exsentences=1&
-exlimit=max
-// /w/api.php?format=json&action=query&generator=search&gsrnamespace=0&gsrsearch=paris&gsrqiprofile=classic&gsrlimit=10&prop=info|extracts&inprop=url|displaytitle&exchars=400
-
-// /w/api.php?format=json&action=query&prop=info|extracts&generator=search&inprop=url|displaytitle&exchars=400&exlimit=10&exintro=1&gsrsearch=paris&gsrnamespace=0&gsrlimit=5&gsrqiprofile=classic
-//
-*/
